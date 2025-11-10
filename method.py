@@ -2,7 +2,7 @@ import numpy as np
 from lmfit import models
 import matplotlib.pyplot as plt
 
-from fit.controll import data_import
+from controll import data_import
 
 # define parabolic function
 def parabolic_function(x, a, b):
@@ -10,16 +10,18 @@ def parabolic_function(x, a, b):
     return y
 
 # sigma 50 amplitude 1500
-def gaussian_fit(y, xvalues, centervalue, sigmavalue, amplitudevalue):
+def gaussian_fit(y, xvalues):
     # create model
     model_gauss = models.GaussianModel()
-    params = model_gauss.make_params(
-            center = centervalue,
-            sigma = sigmavalue,
-            amplitude = amplitudevalue)
+    params = model_gauss.param_names
+    independent_variables = model_gauss.independent_vars
+    # params = model_gauss.make_params(
+    #         center = centervalue,
+    #         sigma = sigmavalue,
+    #         amplitude = amplitudevalue)
     
     #use model to fit
-    fit_result = model_gauss.fit(y, params, x = xvalues)
+    fit_result = model_gauss.fit(y, x = xvalues)
 
     return fit_result
 
@@ -74,8 +76,10 @@ class methode:
             if  max_x > h > min_x:
                 count_section.append(c)
                 height_section.append(h)
-    
-        fit_result = gaussian_fit(height_section, count_section, 850, 50, 1500 )
+
+        
+        fit_result = gaussian_fit(height_section, count_section)
+        print(fit_result.fit_report())
 
         max_y = max(fit_result.best_fit)
 

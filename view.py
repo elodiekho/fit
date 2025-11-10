@@ -2,7 +2,7 @@ import numpy as np
 from lmfit import models
 import matplotlib.pyplot as plt
 
-from method import parabolic_fit, parabolic_function, methode
+from fit.method import parabolic_fit, parabolic_function, methode
 
 meto = methode()
 print(meto.maximum(300, 700))
