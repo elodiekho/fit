@@ -9,32 +9,24 @@ def parabolic_function(x, a, b):
     y = a * ((x - b) ** 2)
     return y
 
+
 # sigma 50 amplitude 1500
 def gaussian_fit(y, xvalues):
     # create model
+    y = np.asarray(y, dtype=float)
+    x = np.asarray(xvalues, dtype=float)
+
     model_gauss = models.GaussianModel()
-    params = model_gauss.param_names
-    independent_variables = model_gauss.independent_vars
-    # params = model_gauss.make_params(
-    #         center = centervalue,
-    #         sigma = sigmavalue,
-    #         amplitude = amplitudevalue)
-    
-    #use model to fit
-    fit_result = model_gauss.fit(y, x = xvalues)
+    initial_parameters = model_gauss.make_params(
+        center=np.mean(x),
+        sigma=(np.max(x) - np.min(x)) / 6,
+        amplitude=np.max(y)
+    )
+
+    fit_result = model_gauss.fit(y, params=initial_parameters, x=x)
 
     return fit_result
 
-
-def parabolic_fit(y, xvalues, avalue, bvalue):
-    #create model
-    mod_parabolic = models.Model(parabolic_function)
-    
-    # use model to fit
-    fit_result = mod_parabolic.fit(y, x = xvalues, a = avalue, b = bvalue)
-
-    #return fit results
-    return fit_result
 
 
 class methode:
@@ -42,31 +34,7 @@ class methode:
     def __init__(self):
         self.height, self.counts = data_import('datana22.csv')
 
-    def maximum_parabolic(self, min_x, max_x):
 
-        count_section = []
-        height_section = []
-
-        for h, c in zip(self.height, self.counts):
-            if  max_x > h > min_x:
-                count_section.append(c)
-                height_section.append(h)
-    
-        b_guess = np.mean(height_section)
-        fit_result = parabolic_fit(height_section, xvalues = count_section, avalue = 1, bvalue = 0)
-
-        max_y = max(fit_result.best_fit)
-
-        #create new figure
-        plt.figure()
-
-        #create plot with fit
-        plt.plot(height_section, count_section,'o')
-        plt.plot(height_section, fit_result.best_fit, 'r-')
-        plt.show()
-
-        return max_y
-    
     def maximum_gauss(self, min_x, max_x):
 
         count_section = []
@@ -78,7 +46,7 @@ class methode:
                 height_section.append(h)
 
         
-        fit_result = gaussian_fit(height_section, count_section)
+        fit_result = gaussian_fit(count_section, height_section)
         print(fit_result.fit_report())
 
         max_y = max(fit_result.best_fit)
