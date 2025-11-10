@@ -14,7 +14,7 @@ def gaussian_fit(y, xvalues):
     # create model
     model_gauss = models.GaussianModel()
 
-    pars = model_gauss.guess(y, x=xvalues)
+    pars = model_gauss.guess(y, x = xvalues)
 
     params = model_gauss.param_names
     independent_variables = model_gauss.independent_vars
@@ -45,31 +45,6 @@ class methode:
     def __init__(self):
         self.height, self.counts = data_import('datana22.csv')
 
-    def maximum_parabolic(self, min_x, max_x):
-
-        count_section = []
-        height_section = []
-
-        for h, c in zip(self.height, self.counts):
-            if  max_x > h > min_x:
-                count_section.append(c)
-                height_section.append(h)
-    
-        b_guess = np.mean(height_section)
-        fit_result = parabolic_fit(height_section, xvalues = count_section, avalue = 1, bvalue = 0)
-
-        max_y = max(fit_result.best_fit)
-
-        #create new figure
-        plt.figure()
-
-        #create plot with fit
-        plt.plot(height_section, count_section,'o')
-        plt.plot(height_section, fit_result.best_fit, 'r-')
-        plt.show()
-
-        return max_y
-    
     def maximum_gauss(self, min_x, max_x):
 
         count_section = []
@@ -80,8 +55,14 @@ class methode:
                 count_section.append(c)
                 height_section.append(h)
 
-
-        fit_result = gaussian_fit(height_section, count_section)
+        print(count_section)
+        print(max(count_section))
+        print(height_section)
+        print(count_section)
+        print(min_x)
+        print(max_x)
+        
+        fit_result = gaussian_fit(np.array(count_section), np.array(height_section))
         print(fit_result.fit_report())
 
         max_y = max(fit_result.best_fit)
@@ -99,7 +80,7 @@ class methode:
     
 meto = methode()
 # print(meto.maximum(600, 1100))
-meto.maximum_gauss(600,1100)
+meto.maximum_gauss(float(600),float(1100))
     
 
 

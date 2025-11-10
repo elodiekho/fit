@@ -31,8 +31,7 @@ def data_import(filename):
     return height, counts
 
 height, counts = data_import('datana22.csv')
-print(counts)
-print(max(counts))
+
 
 #create new figure
 plt.figure()
