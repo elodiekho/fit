@@ -13,6 +13,9 @@ def parabolic_function(x, a, b):
 def gaussian_fit(y, xvalues):
     # create model
     model_gauss = models.GaussianModel()
+
+    pars = model_gauss.guess(y, x=xvalues)
+
     params = model_gauss.param_names
     independent_variables = model_gauss.independent_vars
     # params = model_gauss.make_params(
@@ -21,7 +24,7 @@ def gaussian_fit(y, xvalues):
     #         amplitude = amplitudevalue)
     
     #use model to fit
-    fit_result = model_gauss.fit(y, x = xvalues)
+    fit_result = model_gauss.fit(y, pars, x = xvalues)
 
     return fit_result
 
@@ -77,7 +80,7 @@ class methode:
                 count_section.append(c)
                 height_section.append(h)
 
-        
+
         fit_result = gaussian_fit(height_section, count_section)
         print(fit_result.fit_report())
 
@@ -96,7 +99,7 @@ class methode:
     
 meto = methode()
 # print(meto.maximum(600, 1100))
-print(meto.maximum_gauss(600,1100))
+meto.maximum_gauss(600,1100)
     
 
 
